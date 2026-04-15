@@ -1,0 +1,34 @@
+name: taracert
+services:
+  certbot:
+    image: certbot/certbot:v5.5.0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./taracert/deploy-hook.sh:/deploy-hook.sh:ro
+      - ./taracert/docker-reload.py:/docker-reload.py:ro
+      - certbot-certs:/etc/letsencrypt
+      - certbot-www:/var/www/html
+    environment:
+      - COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}
+      - SERVER_HOSTNAME=${SERVER_HOSTNAME}
+      - RELOAD_SERVICES=${RELOAD_SERVICES:-}
+      - GENERATE_DHPARAMS=${GENERATE_DHPARAMS:-0}
+    command: >
+      sh -c "trap exit TERM; while :; do
+        certbot renew --webroot --webroot-path=/var/www/html --deploy-hook /deploy-hook.sh;
+        sleep 12h;
+      done"
+    entrypoint: ""
+    restart: always
+    healthcheck:
+      test: [ "CMD", "test", "-e", "/etc/letsencrypt/live/${SERVER_HOSTNAME}/fullchain.pem" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 15
+    security_opt:
+      - label=disable
+
+volumes:
+  certbot-certs:
+  certbot-www:

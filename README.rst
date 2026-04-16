@@ -12,7 +12,7 @@ Add as a git submodule at ``./taracert`` in the consuming project:
 
 .. code-block:: sh
 
-   git submodule add git@github.com:cr3/taracert.git taracert
+   git submodule add git@github.com:taradix/taracert.git taracert
 
 Include the shared compose fragment in the project's ``compose.yml``:
 

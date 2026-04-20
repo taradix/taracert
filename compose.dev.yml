@@ -4,6 +4,6 @@ services:
     volumes:
       - ./generate-cert.sh:/generate-cert.sh:ro
     environment:
-      - IPV4_NETWORK=${IPV4_NETWORK:-172.22.1}
+      - SAN_IPS=${IPV4_NETWORK:-172.22.1}.0/24
     command: >
       sh -c "trap exit TERM; /generate-cert.sh; /deploy-hook.sh; echo Ready; sleep infinity"

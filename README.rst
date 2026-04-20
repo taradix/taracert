@@ -92,7 +92,7 @@ Self-signed bootstrap
 ``generate-cert.sh`` creates a self-signed cert layout under ``/etc/letsencrypt/``
 that mimics Let's Encrypt's directory structure. Useful for dev
 (``compose.dev.yml``) where the real ACME flow can't run. Requires
-``SERVER_HOSTNAME`` and ``IPV4_NETWORK`` (used as a SAN for internal IP access).
+``SERVER_HOSTNAME`` and optionally ``SAN_IPS`` (defaults to 172.22.1.0/24).
 
 Not wired into the default runtime — mount it only from dev overrides.
 

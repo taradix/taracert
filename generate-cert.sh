@@ -14,10 +14,21 @@ fi
 
 mkdir -p "${LIVE_DIR}" "${ARCHIVE_DIR}" "${RENEWAL_DIR}"
 
-san_ips="${SAN_IPS:-${IPV4_NETWORK}.240}"
+expand_ips() {
+  for token in $1; do
+    case "$token" in
+      */*)
+        prefix=$(echo "$token" | cut -d/ -f1 | cut -d. -f1-3)
+        j=1; while [ "$j" -le 254 ]; do echo "${prefix}.${j}"; j=$((j+1)); done
+        ;;
+      *) echo "$token" ;;
+    esac
+  done
+}
+
 san_entries=""
 i=1
-for ip in $san_ips; do
+for ip in $(expand_ips "${SAN_IPS:-}"); do
   san_entries="${san_entries}IP.${i} = ${ip}
 "
   i=$((i + 1))

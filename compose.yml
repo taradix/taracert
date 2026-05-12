@@ -1,7 +1,7 @@
 name: taracert
 services:
   certbot:
-    image: certbot/certbot:v5.5.0
+    image: certbot/certbot:v5.6.0
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./deploy-hook.sh:/deploy-hook.sh:ro
